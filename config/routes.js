@@ -1,5 +1,7 @@
 const axios = require('axios');
-
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const Users = require('../database/users-model');
 const { authenticate } = require('../auth/authenticate');
 
 module.exports = server => {
@@ -9,7 +11,14 @@ module.exports = server => {
 };
 
 function register(req, res) {
-  // implement user registration
+  const user = req.body;
+  const hash = user.bcrypt.hashSync(user.password, 10); // create a hashed password to be used in db
+  user.password = hash; // set user password to new hash
+  if (user.password && user.username) { // check if username and password are passed in
+    // CREATE MODEL FOR USERS
+  } else { // if not, give 401
+    res.status(400).json({ message: 'Username and Password required! '})
+  }
 }
 
 function login(req, res) {
