@@ -1,12 +1,12 @@
 const db = require('./dbConfig');
 
 module.exports = {
-    insert,
+    add,
     findByUsername,
     findById
-}
+};
 
-function insert (user) {
+function add (user) {
     return db('users').insert(user);
 }
 
