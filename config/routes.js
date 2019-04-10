@@ -12,10 +12,17 @@ module.exports = server => {
 
 function register(req, res) {
   const user = req.body;
-  const hash = user.bcrypt.hashSync(user.password, 10); // create a hashed password to be used in db
+  const hash = bcrypt.hashSync(user.password, 10); // create a hashed password to be used in db
   user.password = hash; // set user password to new hash
   if (user.password && user.username) { // check if username and password are passed in
-    // CREATE MODEL FOR USERS
+    Users.insert(user) // if so, insert user to db
+      .then(newUser => {
+        res
+          .status(201)
+          .json({ message: `User "${newUser.username}" created`})
+      }).catch(err =>{
+        res.status(500).json(error)
+      })
   } else { // if not, give 401
     res.status(400).json({ message: 'Username and Password required! '})
   }
